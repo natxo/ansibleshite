@@ -1,0 +1,9 @@
+---
+# vars file for rsyslog_hybrid for Rocky Linux
+rsyslog_hybrid_packages:
+  - rsyslog
+  - policycoreutils-python-utils
+rsyslog_hybrid_servicename: rsyslog
+ryslog_hybrid_workdir: /var/spool/rsyslog
+rsyslog_hybrid_config_file: /etc/rsyslog.conf
+rsyslog_hybrid_include_config: /etc/rsyslog.d/*.conf

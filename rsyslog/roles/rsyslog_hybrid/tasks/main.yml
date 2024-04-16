@@ -1,0 +1,49 @@
+---
+- name: Include distribution specific variables
+  ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"
+  tags:
+    - rsyslog_hybrid
+
+# tasks file for rsyslog_hybrid
+- name: Rsyslog_hybrid software
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ rsyslog_hybrid_packages }}"
+    state: present
+    update_cache: false
+  tags:
+    rsyslog_hybrid
+
+- name: Include distro specific tasks
+  ansible.builtin.include_tasks: "roles/rsyslog_hybrid/tasks/{{ ansible_distribution }}.yml"
+  tags:
+    rsyslog_hybrid
+
+- name: Create rsyslog.conf for hybrid systems
+  become: true
+  ansible.builtin.template:
+    src: rsyslog.conf.j2
+    dest: "{{ rsyslog_hybrid_config_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+    trim_blocks: false
+    validate: "{{ 'rsyslogd -N1 -f %s' }}"
+  tags:
+    - rsyslog_hybrid
+
+- name: Configure firewalld for rsyslog_hybrid tcp
+  ansible.posix.firewalld:
+    port: "{{ item }}/tcp"
+    permanent: true
+    state: enabled
+    immediate: true
+  loop: "{{ hostvars[ansible_hostname]['rsyslog_hybrid_ports']['tcp'] }}"
+
+- name: Configure firewalld for rsyslog_hybrid udp
+  ansible.posix.firewalld:
+    port: "{{ item }}/udp"
+    permanent: true
+    state: enabled
+    immediate: true
+  loop: "{{ hostvars[ansible_hostname]['rsyslog_hybrid_ports']['udp'] }}"

@@ -1,0 +1,10 @@
+---
+all:
+  children:
+    dev:
+      children:
+        log:
+          hosts:
+            log1:
+              #ansible_host:  2a02:a45c:660:7::4bf
+              ansible_host: 192.168.124.143 

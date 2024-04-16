@@ -1,0 +1,5 @@
+- name: Rsyslog hybrid
+  hosts: log
+  become: true
+  roles:
+    - rsyslog_hybrid
