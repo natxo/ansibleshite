@@ -1,0 +1,5 @@
+- name: Package manager
+  hosts: yumrepo
+  become: true
+  roles:
+    - package_manager

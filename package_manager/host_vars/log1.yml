@@ -1,0 +1,13 @@
+---
+rsyslog_hybrid_ports:
+  udp:
+    - 514
+    - 5514
+  tcp:
+    - 514
+    - 6514
+rsyslog_hybrid_sources:
+  asa:
+    - kkk
+  checkpoint:
+    - kkkkkll

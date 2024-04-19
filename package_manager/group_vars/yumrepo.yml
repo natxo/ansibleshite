@@ -1,0 +1,9 @@
+---
+package_manager_yumrepo_downloaddir: /srv/yumrepo
+package_manager_packages:
+  - yum-utils
+  - python3-libselinux
+package_manager_yumrepos:
+  rhel8:
+    - rhel-8-for-x86_64-baseos-rpms
+    - rhel-8-for-x86_64-appstream-rpms

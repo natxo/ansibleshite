@@ -1,0 +1,9 @@
+---
+all:
+  children:
+    dev:
+      children:
+        yumrepo:
+          hosts:
+            yum:
+              ansible_host: 192.168.124.157 

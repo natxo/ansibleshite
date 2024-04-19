@@ -1,0 +1,10 @@
+---
+- name: Include distribution specific variables
+  ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"
+  tags:
+    - package_manager
+
+- name: Include distro specific tasks
+  ansible.builtin.include_tasks: "roles/package_manager/tasks/{{ ansible_distribution }}.yml"
+  tags:
+    package_manager

@@ -1,0 +1,41 @@
+---
+- name: Package manager software
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ package_manager_packages }}"
+    state: present
+    update_cache: false
+  tags:
+    package_manager
+
+- name: Ensure downloaddir is present
+  become: true
+  ansible.builtin.file:
+    path: "{{ package_manager_yumrepo_downloaddir }}"
+    state: directory
+    mode: '755'
+
+- name: Ensure selinux context http for downloaddir
+  become: true
+  community.general.sefcontext:
+    target: "{{ package_manager_yumrepo_downloaddir }}(/.*)?"
+    setype: httpd_sys_content_t
+    state: present
+
+- name: Apply proper selinux context to downloaddir
+  become: true
+  ansible.builtin.command: restorecon -v "{{ package_manager_yumrepo_downloaddir }}"
+
+- name: Synchronize rhel 8 to local disk
+  become: true
+  ansible.builtin.command:
+    argv:
+      - reposync
+      - --repoid
+      - "{{ item }}"
+      - --downloaddir
+      - "{{ package_manager_yumrepo_downloaddir }}"
+      - --newest-only
+      - --downloadcomps
+      - --download-metadata
+  loop: "{{ package_manager_yumrepos['rhel8'] }}"
